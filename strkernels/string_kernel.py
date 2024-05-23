@@ -3,7 +3,6 @@
 
 
 from abc import ABC, abstractmethod
-from .libshogun.shogun import StringCharFeatures
 
 
 class StringKernel(ABC):
@@ -11,23 +10,17 @@ class StringKernel(ABC):
     Base class to represent a string kernel.
     """
 
-    def __init__(self, alphabet=None, **kernel_params):
+    def __init__(self, **kernel_params):
         """
-        Constructor for attributes and parameters definition.
+        Constructor with attributes and kernel parameters definition.
+
+        Parameters:
+            **kernel_params: keyword arguments with specific kernel parameters.
         """
-        # general attributes
         self._kernel_name = None
-        self._alphabet = alphabet  # 'DNA', 'RNA', 'protein', 'rawbyte'
-        self._kernel_params = {}  # kernel parameters dictionary
+        self._kernel_params = {}
 
-        # features objects of Shogun toolbox
-        self._X_left_sg = None
-        self._X_right_sg = None
-
-        # kernel object of Shogun toolbox
-        self._kernel_sg = None
-
-        # set or update kernel parameters
+        # set kernel parameters
         if kernel_params:
             self.set_params(**kernel_params)
 
@@ -35,45 +28,39 @@ class StringKernel(ABC):
     def set_params(self, **kernel_params):
         """
         Set or update kernel parameters.
+
+        Parameters:
+            **kernel_params: keyword arguments with specific kernel parameters.
         """
         for key, value in kernel_params.items():
             self._kernel_params[key] = value
 
 
     @abstractmethod
-    def __call__(self, X_left, X_right, alphabet=None, **kernel_params):
+    def kernel_function(self, str_a, str_b):
         """
-        Compute the kernel matrix between strings  
-        in X_left and X_right collections.
+        Calculate the kernel function between two strings.
 
         Parameters:
-            X_left: ndarray or list of strings of len == n_samples in X_left.
-            X_right: ndarray or list of strings of len == n_samples in X_right.
+            str_a (string)
+            str_b (string)
 
         Returns:
-            A real kernel matrix of shape (len(X_left), len(X_right)).
+            float: the result of kernel function.
         """
-        if alphabet is not None:
-            self._alphabet = alphabet  # 'DNA', 'RNA', 'protein', 'rawbyte'
 
-        # set or update kernel parameters
-        if kernel_params:
-            self.set_params(**kernel_params)
 
-        ## Create Shogun features objects
-        #
-        if self._alphabet is None:  # TODO: detect alphabet and update self._alphabet
-            raise ValueError("Alphabet is not defined.")  
+    def __call__(self, X_left, X_right):
+        """
+        Compute the kernel matrix between strings in X_left and X_right.
 
-        if self._alphabet == 'DNA':
-            from .libshogun.shogun import DNA
-            alphabet_sg = DNA
+        Parameters:
+            X_left: ndarray or list of strings.
+            X_right: ndarray or list of strings.
 
-        self._X_left_sg = StringCharFeatures(X_left, alphabet_sg)
-        if X_right == X_left:  # in training are
-            self._X_right_sg = self._X_left_sg
-        else:
-            self._X_right_sg = StringCharFeatures(X_right, alphabet_sg)
+        Returns:
+            A float matrix of shape (len(X_left), len(X_right)).
+        """
 
 
     def __str__(self):
@@ -81,6 +68,7 @@ class StringKernel(ABC):
         if self._kernel_params:
             str_ret += ' ' + str(self._kernel_params)
         return str_ret
+
 
     def __repr__(self):
         return self.__str__()
