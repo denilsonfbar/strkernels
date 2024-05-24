@@ -52,41 +52,41 @@ class StringKernel(ABC):
         """
 
 
-    def compute_kernel_matrix_row(self, kernel_matrix, X_left, X_right, row_index, is_symmetric):
+    def compute_kernel_matrix_row(self, kernel_matrix, X_rows, X_cols, row_index, is_symmetric):
         """
         Compute an entire row of the kernel matrix.
         """
-        for j in range(len(X_right)):
+        for j in range(len(X_cols)):
             if is_symmetric and row_index > j:
                 kernel_matrix[row_index, j] = kernel_matrix[j, row_index]
             else:
-                kernel_matrix[row_index, j] = self.kernel_function(X_left[row_index], X_right[j])
+                kernel_matrix[row_index, j] = self.kernel_function(X_rows[row_index], X_cols[j])
 
 
-    def __call__(self, X_left, X_right):
+    def __call__(self, X_rows, X_cols):
         """
-        Compute the kernel matrix between strings in X_left and X_right
+        Compute the kernel matrix between strings in X_rows and X_cols,
         parallelizing the kernel function execution by row.
 
         Parameters:
-            X_left: ndarray or list of strings.
-            X_right: ndarray or list of strings.
+            X_rows: ndarray or list of strings.
+            X_cols: ndarray or list of strings.
 
         Returns:
-            A float matrix of shape (len(X_left), len(X_right)).
+            A float matrix of shape (len(X_rows), len(X_cols)).
         """
-        if X_right is X_left:  # in training
+        if X_cols is X_rows:  # in training
             is_symmetric = True
         else:  # in prediction
             is_symmetric = False
 
-        n_rows = len(X_left)
-        n_cols = len(X_right)
+        n_rows = len(X_rows)
+        n_cols = len(X_cols)
         kernel_matrix = np.zeros((n_rows, n_cols))
 
         with ThreadPoolExecutor() as executor:
             futures = [executor.submit(
-                self.compute_kernel_matrix_row, kernel_matrix, X_left, X_right, i, is_symmetric) 
+                self.compute_kernel_matrix_row, kernel_matrix, X_rows, X_cols, i, is_symmetric) 
                 for i in range(n_rows)]
             
             # wait for all tasks to complete

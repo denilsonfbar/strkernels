@@ -36,7 +36,6 @@ class FixedDegreeStringKernel(StringKernel):
         Returns:
             float: the result of kernel function.
         """
-        
         degree = self._kernel_params['degree']
         shortest_string_len = min(len(str_a), len(str_b))
         kernel_value = 0
