@@ -15,7 +15,7 @@ from strkernels import SinglePositionalStringKernel
 class TestKernelMatrix(unittest.TestCase):
 
     def setUp(self):
-        self.kernel = SinglePositionalStringKernel()
+        self.kernel = SinglePositionalStringKernel(normalizer=None)
 
     def test_single_set(self):
         strings = np.array(["ATCG", "ATGG", "TACG", "GCTA"])

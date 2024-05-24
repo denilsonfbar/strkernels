@@ -6,13 +6,15 @@ from abc import ABC, abstractmethod
 import numpy as np
 from concurrent.futures import ThreadPoolExecutor
 
+from .normalizer import normalize
+
 
 class StringKernel(ABC):
     """
     Base class to represent a string kernel.
     """
 
-    def __init__(self, **kernel_params):
+    def __init__(self, normalizer='sqrt_diagonal', **kernel_params):
         """
         Constructor with attributes and kernel parameters definition.
 
@@ -20,6 +22,7 @@ class StringKernel(ABC):
             **kernel_params: keyword arguments with specific kernel parameters.
         """
         self._kernel_name = None
+        self._normalizer = normalizer
         self._kernel_params = {}
 
         # set kernel parameters
@@ -92,6 +95,10 @@ class StringKernel(ABC):
             # wait for all tasks to complete
             for future in futures:
                 future.result()
+
+        # kernel matrix normalization
+        if self._normalizer is not None:
+            normalize(self._normalizer, X_rows, X_cols, self.kernel_function, kernel_matrix, is_symmetric)
 
         return kernel_matrix
 
