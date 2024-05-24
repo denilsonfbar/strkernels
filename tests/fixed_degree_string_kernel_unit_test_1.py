@@ -9,13 +9,13 @@ import numpy as np
 # kernel class import
 from sys import path
 path.append('..')
-from strkernels import SinglePositionalStringKernel
+from strkernels import FixedDegreeStringKernel
 
 
 class TestKernelMatrix(unittest.TestCase):
 
     def setUp(self):
-        self.kernel = SinglePositionalStringKernel()
+        self.kernel = FixedDegreeStringKernel(degree=1)
 
     def test_single_set(self):
         strings = np.array(["ATCG", "ATGG", "TACG", "GCTA"])
@@ -57,7 +57,6 @@ class TestKernelMatrix(unittest.TestCase):
     
     def test_performance(self):
         strings = np.array(["ATCGA" * 20] * 1000)  # 1000 sequences of length 100
-        #  strings = np.array(["ATCGA" * 200] * 5000)  # 5000 sequences of length 1000
         start_time = time.time()
         kernel_matrix = self.kernel(strings, strings)
         end_time = time.time()
@@ -69,20 +68,10 @@ if __name__ == '__main__':
 
 """
 1000 sequences of length 100:
-.Performance Test Duration: 2.5722 seconds
+.Performance Test Duration: 4.8814 seconds
 ....
 ----------------------------------------------------------------------
-Ran 5 tests in 2.603s
-
-OK
-"""
-
-"""
-5000 sequences of length 1000:
-.Performance Test Duration: 494.8487 seconds
-....
-----------------------------------------------------------------------
-Ran 5 tests in 494.905s
+Ran 5 tests in 4.911s
 
 OK
 """
