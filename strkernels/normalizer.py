@@ -31,8 +31,8 @@ def sqrt_diagonal_kernel_normalizer(X_rows, X_cols, kernel_function, kernel_matr
             else:
                 denominator = math.sqrt(X_rows_self_kernel[i] * X_cols_self_kernel[j])
             if denominator == 0.0: 
-                denominator = np.finfo(np.float64).min
+                denominator = np.finfo(np.float64).eps
 
             normalized_kernel_matrix[i, j] = kernel_matrix[i, j] / denominator
 
-    kernel_matrix = normalized_kernel_matrix
+    kernel_matrix[:] = normalized_kernel_matrix
