@@ -4,7 +4,7 @@
 
 from abc import ABC, abstractmethod
 import numpy as np
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor
 
 from .normalizer import normalize
 
@@ -87,7 +87,7 @@ class StringKernel(ABC):
         n_cols = len(X_cols)
         kernel_matrix = np.zeros((n_rows, n_cols))
 
-        with ThreadPoolExecutor() as executor:
+        with ProcessPoolExecutor() as executor:
             futures = [executor.submit(
                 self.compute_kernel_matrix_row, kernel_matrix, X_rows, X_cols, i, is_symmetric) 
                 for i in range(n_rows)]
