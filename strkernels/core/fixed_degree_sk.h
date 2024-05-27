@@ -20,7 +20,7 @@ int64_t compute_fixed_degree_sk(char *str_a, char *str_b, int32_t degree)
 	{
 		bool match = true;
 
-		for (int32_t j = i; j < i+degree && match; j++)
+		for (int32_t j=i; j < i+degree && match; j++)
 			match = str_a[j]==str_b[j];
 
 		if (match)
