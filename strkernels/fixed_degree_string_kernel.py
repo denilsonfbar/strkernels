@@ -12,21 +12,34 @@ class FixedDegreeStringKernel(StringKernel):
     Fixed Degree string kernel.
     """
 
-    def __init__(self, **kernel_params):
+    def __init__(self, normalizer='sqrt_diagonal', **kernel_params):
         """
         Kernel constructor.
 
         Parameters:
             **kernel_params: keyword arguments with specific kernel parameters.
         """
+        super().__init__()  # base class constructor
+
+        # kernel name
+        self._kernel_name = 'FixedDegreeStringKernel'
+
         # specific kernel parameter
         if 'degree' not in kernel_params:
             kernel_params['degree'] = 3  # default degree value
 
-        super().__init__(**kernel_params)  # base class constructor
+        # set kernel parameters
+        self.set_params(**kernel_params)
         
-        # adjusting attributes
-        self._kernel_name = 'FixedDegreeStringKernel'
+        # set normalizer
+        self._normalizer = normalizer
+
+
+    def set_params(self, **kernel_params):
+
+        super().set_params(**kernel_params)
+
+        # ctypes parameters conversion
         self._param_1 = np.float64(self._kernel_params['degree'])
         self._param_2 = 0.0 
         self._param_3 = 0.0

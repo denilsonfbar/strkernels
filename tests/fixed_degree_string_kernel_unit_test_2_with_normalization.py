@@ -70,6 +70,7 @@ class TestKernelMatrix(unittest.TestCase):
     
     def test_performance(self):
         strings = np.array(["ATCGA" * 20] * 1000)  # 1000 sequences of length 100
+        # strings = np.array(["ATCGA" * 200] * 5000)  # 5000 sequences of length 1000
         start_time = time.time()
         kernel_matrix = self.kernel(strings, strings)
         end_time = time.time()
@@ -96,6 +97,16 @@ C: 1000 sequences of length 100:
 ....
 ----------------------------------------------------------------------
 Ran 5 tests in 0.238s
+
+OK
+"""
+
+"""
+C: 5000 sequences of length 1000:
+.Performance Test Duration: 44.3686 seconds
+....
+----------------------------------------------------------------------
+Ran 5 tests in 44.416s
 
 OK
 """

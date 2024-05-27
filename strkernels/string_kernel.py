@@ -2,7 +2,7 @@
 # Author: Denilson Fagundes Barbosa, denilsonfbar@gmail.com
 
 
-from abc import ABC
+from abc import ABC, abstractmethod
 import os
 import numpy as np
 import ctypes as ct
@@ -13,26 +13,22 @@ class StringKernel(ABC):
     Base class to represent a string kernel.
     """
 
-    def __init__(self, normalizer='sqrt_diagonal', **kernel_params):
+    def __init__(self):
         """
-        Constructor with attributes and kernel parameters definition.
-
-        Parameters:
-            **kernel_params: keyword arguments with specific kernel parameters.
+        Constructor with attributes definition.
         """
         self._kernel_name = None
+        self._kernel_params = {}
+        self._normalizer = None
+
+        # for ctypes parameters conversion        
         self._param_1 = None 
         self._param_2 = None 
         self._param_3 = None
         self._param_4 = None
-        self._normalizer = normalizer
-        self._kernel_params = {}
-
-        # set kernel parameters
-        if kernel_params:
-            self.set_params(**kernel_params)
 
 
+    @abstractmethod
     def set_params(self, **kernel_params):
         """
         Set or update kernel parameters.
