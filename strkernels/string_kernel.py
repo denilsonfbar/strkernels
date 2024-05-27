@@ -72,7 +72,7 @@ class StringKernel(ABC):
                                      ct.c_double, ct.c_double,
                                      ct.c_double, ct.c_double,
                                      ct.c_char_p,
-                                     # int **var in C is an array of type np.uintp:   
+                                     # **var in C is an array of type np.uintp:   
                                      np.ctypeslib.ndpointer(dtype=np.uintp, ndim=1, flags='C')]
         
         c_lib.compute_km.restype = None
