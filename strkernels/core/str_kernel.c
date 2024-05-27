@@ -6,6 +6,7 @@ Author: Denilson Fagundes Barbosa, denilsonfbar@gmail.com
 #include <stdint.h>
 #include "str_kernel.h"
 #include "fixed_degree_sk.h"
+#include "subsequence_sk.h"
 
 double compute_kernel(char *str_a, char *str_b,
                       char *kernel_name,
@@ -17,9 +18,10 @@ double compute_kernel(char *str_a, char *str_b,
         int32_t degree = (int32_t) param_1;
         return (double)compute_fixed_degree_sk(str_a, str_b, degree);
     } 
-/*    else if (strcmp(kernel_name, "SubsequenceStringKernel") == 0) 
+    else if (strcmp(kernel_name, "SubsequenceStringKernel") == 0) 
     {
-        return (double)compute_subsequence_sk();
+        int32_t maxlen = (int32_t) param_1;
+        double lambda = param_2;
+        return compute_subsequence_sk(str_a, str_b, maxlen, lambda);
     } 
-*/
 }    
