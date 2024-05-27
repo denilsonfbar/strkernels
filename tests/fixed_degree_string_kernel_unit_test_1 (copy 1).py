@@ -67,21 +67,11 @@ if __name__ == '__main__':
     unittest.main()
 
 """
-Python: 1000 sequences of length 100:
+1000 sequences of length 100:
 .Performance Test Duration: 4.8814 seconds
 ....
 ----------------------------------------------------------------------
 Ran 5 tests in 4.911s
-
-OK
-"""
-
-"""
-C: 1000 sequences of length 100:
-.Performance Test Duration: 0.1943 seconds
-....
-----------------------------------------------------------------------
-Ran 5 tests in 0.224s
 
 OK
 """

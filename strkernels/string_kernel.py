@@ -2,11 +2,10 @@
 # Author: Denilson Fagundes Barbosa, denilsonfbar@gmail.com
 
 
-from abc import ABC, abstractmethod
+from abc import ABC
+import os
 import numpy as np
-from concurrent.futures import ProcessPoolExecutor
-
-from .normalizer import normalize
+import ctypes as ct
 
 
 class StringKernel(ABC):
@@ -22,6 +21,10 @@ class StringKernel(ABC):
             **kernel_params: keyword arguments with specific kernel parameters.
         """
         self._kernel_name = None
+        self._param_1 = None 
+        self._param_2 = None 
+        self._param_3 = None
+        self._param_4 = None
         self._normalizer = normalizer
         self._kernel_params = {}
 
@@ -41,35 +44,9 @@ class StringKernel(ABC):
             self._kernel_params[key] = value
 
 
-    @abstractmethod
-    def kernel_function(self, str_a, str_b):
-        """
-        Calculate the kernel function between two strings.
-
-        Parameters:
-            str_a (string)
-            str_b (string)
-
-        Returns:
-            float: the result of kernel function.
-        """
-
-
-    def compute_kernel_matrix_row(self, kernel_matrix, X_rows, X_cols, row_index, is_symmetric):
-        """
-        Compute an entire row of the kernel matrix.
-        """
-        for j in range(len(X_cols)):
-            if is_symmetric and row_index > j:
-                kernel_matrix[row_index, j] = kernel_matrix[j, row_index]
-            else:
-                kernel_matrix[row_index, j] = self.kernel_function(X_rows[row_index], X_cols[j])
-
-
     def __call__(self, X_rows, X_cols):
         """
-        Compute the kernel matrix between strings in X_rows and X_cols,
-        parallelizing the kernel function execution by row.
+        Compute the kernel matrix between strings in X_rows and X_cols.
 
         Parameters:
             X_rows: ndarray or list of strings.
@@ -79,26 +56,68 @@ class StringKernel(ABC):
             A float matrix of shape (len(X_rows), len(X_cols)).
         """
         if X_cols is X_rows:  # in training
-            is_symmetric = True
+            symmetric = True
         else:  # in prediction
-            is_symmetric = False
+            symmetric = False
 
-        n_rows = len(X_rows)
-        n_cols = len(X_cols)
-        kernel_matrix = np.zeros((n_rows, n_cols))
+        # creating empty kernel matrix
+        kernel_matrix = np.zeros((len(X_rows), len(X_cols)), dtype=np.float64)
 
-        with ProcessPoolExecutor() as executor:
-            futures = [executor.submit(
-                self.compute_kernel_matrix_row, kernel_matrix, X_rows, X_cols, i, is_symmetric) 
-                for i in range(n_rows)]
-            
-            # wait for all tasks to complete
-            for future in futures:
-                future.result()
+        # including C library
+        module_path = os.path.dirname(os.path.abspath(__file__))
+        c_lib_file_path = os.path.join(module_path, 'core.so')
+        c_lib = ct.CDLL(c_lib_file_path)
 
-        # kernel matrix normalization
-        if self._normalizer is not None:
-            normalize(self._normalizer, X_rows, X_cols, self.kernel_function, kernel_matrix, is_symmetric)
+        # ctypes compute kernel matrix function signature
+        c_lib.compute_km.argtypes = [ct.POINTER(ct.c_char_p), ct.POINTER(ct.c_char_p), 
+                                     ct.c_int32, ct.c_int32,
+                                     ct.c_bool,
+                                     ct.c_char_p,
+                                     ct.c_double, ct.c_double,
+                                     ct.c_double, ct.c_double,
+                                     ct.c_char_p,
+                                     # int **var in C is an array of type np.uintp:   
+                                     np.ctypeslib.ndpointer(dtype=np.uintp, ndim=1, flags='C')]
+        
+        c_lib.compute_km.restype = None
+
+        # converting attributes to ctypes
+        X_rows_ct = (ct.c_char_p * len(X_rows))()
+        X_rows_ct[:] = [s.encode('utf-8') for s in X_rows]
+        X_cols_ct = (ct.c_char_p * len(X_cols))()
+        X_cols_ct[:] = [s.encode('utf-8') for s in X_cols]
+
+        X_rows_len_ct = ct.c_int32(len(X_rows))
+        X_cols_len_ct = ct.c_int32(len(X_cols))
+
+        symmetric_ct = ct.c_bool(symmetric)
+
+        kernel_name_ct = ct.c_char_p(self._kernel_name.encode('utf-8'))
+
+        param_1_ct = ct.c_double(self._param_1)
+        param_2_ct = ct.c_double(self._param_2)
+        param_3_ct = ct.c_double(self._param_3)
+        param_4_ct = ct.c_double(self._param_4)
+
+        if self._normalizer is None:
+            normalizer = ''
+        else:
+            normalizer = self._normalizer
+        normalizer_ct = ct.c_char_p(normalizer.encode('utf-8'))
+
+        kernel_matrix_ct = (kernel_matrix.__array_interface__['data'][0] 
+                            + np.arange(kernel_matrix.shape[0])
+                            * kernel_matrix.strides[0]).astype(np.uintp)
+
+        # computing kernel matrix
+        c_lib.compute_km(X_rows_ct, X_cols_ct, 
+                         X_rows_len_ct, X_cols_len_ct,
+                         symmetric_ct,
+                         kernel_name_ct,
+                         param_1_ct, param_2_ct,
+                         param_3_ct, param_4_ct,
+                         normalizer_ct,
+                         kernel_matrix_ct)
 
         return kernel_matrix
 

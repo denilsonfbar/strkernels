@@ -2,6 +2,8 @@
 # Author: Denilson Fagundes Barbosa, denilsonfbar@gmail.com
 
 
+import numpy as np
+
 from .string_kernel import StringKernel
 
 
@@ -22,34 +24,10 @@ class FixedDegreeStringKernel(StringKernel):
             kernel_params['degree'] = 3  # default degree value
 
         super().__init__(**kernel_params)  # base class constructor
+        
+        # adjusting attributes
         self._kernel_name = 'FixedDegreeStringKernel'
-
-
-    def kernel_function(self, str_a, str_b):
-        """
-        Fixed Degree string kernel.
-
-        Parameters:
-            str_a (string)
-            str_b (string)
-
-        Returns:
-            float: the result of kernel function.
-        """
-        degree = self._kernel_params['degree']
-        shortest_string_len = min(len(str_a), len(str_b))
-        kernel_value = 0
-
-        for i in range(shortest_string_len-degree+1):
-            match = True
-
-            for j in range(i, i+degree):
-                if match:
-                    match = str_a[j] == str_b[j]
-                else:
-                    break
-
-            if match:
-                kernel_value += 1
-
-        return kernel_value
+        self._param_1 = np.float64(self._kernel_params['degree'])
+        self._param_2 = 0.0 
+        self._param_3 = 0.0
+        self._param_4 = 0.0

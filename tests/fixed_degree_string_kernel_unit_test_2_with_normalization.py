@@ -40,15 +40,10 @@ class TestKernelMatrix(unittest.TestCase):
             [4, 1, 1],
             [3, 2, 0],
             [2, 1, 1]
-        ], dtype=float)
+        ])
 
-        n_rows = len(strings1)
-        n_cols = len(strings2)
-        for i in range(n_rows):
-            for j in range(n_cols):
-                denominator = math.sqrt(self.kernel.kernel_function(strings1[i], strings1[i]) *
-                                        self.kernel.kernel_function(strings2[j], strings2[j]))
-                expected_matrix[i, j] = expected_matrix[i, j] / denominator
+        denominator = 4.  # all strings of test datasets with len == 4
+        expected_matrix = expected_matrix / denominator
 
         kernel_matrix = self.kernel(strings1, strings2)
         np.testing.assert_array_equal(kernel_matrix, expected_matrix)
@@ -85,11 +80,22 @@ if __name__ == '__main__':
     unittest.main()
 
 """
+Python: 1000 sequences of length 100:
 1000 sequences of length 100:
 .Performance Test Duration: 5.1248 seconds
 ....
 ----------------------------------------------------------------------
 Ran 5 tests in 5.156s
+
+OK
+"""
+
+"""
+C: 1000 sequences of length 100:
+.Performance Test Duration: 0.2079 seconds
+....
+----------------------------------------------------------------------
+Ran 5 tests in 0.238s
 
 OK
 """

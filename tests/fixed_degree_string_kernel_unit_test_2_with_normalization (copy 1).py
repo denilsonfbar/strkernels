@@ -5,6 +5,7 @@
 import unittest
 import time
 import numpy as np
+import math
 
 # kernel class import
 from sys import path
@@ -15,7 +16,7 @@ from strkernels import FixedDegreeStringKernel
 class TestKernelMatrix(unittest.TestCase):
 
     def setUp(self):
-        self.kernel = FixedDegreeStringKernel(normalizer=None, degree=1)
+        self.kernel = FixedDegreeStringKernel(degree=1)
 
     def test_single_set(self):
         strings = np.array(["ATCG", "ATGG", "TACG", "GCTA"])
@@ -25,6 +26,10 @@ class TestKernelMatrix(unittest.TestCase):
             [2, 1, 4, 0],
             [0, 0, 0, 4]
         ])
+
+        denominator = expected_matrix[0, 0]
+        expected_matrix = expected_matrix / denominator
+
         kernel_matrix = self.kernel(strings, strings)
         np.testing.assert_array_equal(kernel_matrix, expected_matrix)
 
@@ -35,7 +40,16 @@ class TestKernelMatrix(unittest.TestCase):
             [4, 1, 1],
             [3, 2, 0],
             [2, 1, 1]
-        ])
+        ], dtype=float)
+
+        n_rows = len(strings1)
+        n_cols = len(strings2)
+        for i in range(n_rows):
+            for j in range(n_cols):
+                denominator = math.sqrt(self.kernel.kernel_function(strings1[i], strings1[i]) *
+                                        self.kernel.kernel_function(strings2[j], strings2[j]))
+                expected_matrix[i, j] = expected_matrix[i, j] / denominator
+
         kernel_matrix = self.kernel(strings1, strings2)
         np.testing.assert_array_equal(kernel_matrix, expected_matrix)
 
@@ -52,6 +66,10 @@ class TestKernelMatrix(unittest.TestCase):
             [0, 1, 0],
             [1, 0, 1]
         ])
+
+        denominator = expected_matrix[0, 0]
+        expected_matrix = expected_matrix / denominator
+
         kernel_matrix = self.kernel(strings, strings)
         np.testing.assert_array_equal(kernel_matrix, expected_matrix)
     
@@ -67,21 +85,11 @@ if __name__ == '__main__':
     unittest.main()
 
 """
-Python: 1000 sequences of length 100:
-.Performance Test Duration: 4.8814 seconds
+1000 sequences of length 100:
+.Performance Test Duration: 5.1248 seconds
 ....
 ----------------------------------------------------------------------
-Ran 5 tests in 4.911s
-
-OK
-"""
-
-"""
-C: 1000 sequences of length 100:
-.Performance Test Duration: 0.1943 seconds
-....
-----------------------------------------------------------------------
-Ran 5 tests in 0.224s
+Ran 5 tests in 5.156s
 
 OK
 """
