@@ -15,8 +15,7 @@ from strkernels import SubsequenceStringKernel
 class TestKernelMatrix(unittest.TestCase):
 
     def setUp(self):
-        self.kernel = SubsequenceStringKernel(normalizer=None, 
-                                              maxlen=1,
+        self.kernel = SubsequenceStringKernel(maxlen=1,
                                               ssk_lambda=1.0)
 
     def test_single_set(self):

@@ -26,8 +26,8 @@ class SubsequenceStringKernel(StringKernel):
 
         # specific kernel parameters
         if 'maxlen' not in kernel_params:
-            kernel_params['ssk_maxlen'] = 3  # default maxlen value
-        if 'lambda' not in kernel_params:
+            kernel_params['maxlen'] = 3  # default maxlen value
+        if 'ssk_lambda' not in kernel_params:
             kernel_params['ssk_lambda'] = 0.5  # default lambda value
 
         # set kernel parameters
@@ -42,7 +42,7 @@ class SubsequenceStringKernel(StringKernel):
         super().set_params(**kernel_params)
 
         # ctypes parameters conversion
-        self._param_1 = np.float64(self._kernel_params['ssk_maxlen'])
+        self._param_1 = np.float64(self._kernel_params['maxlen'])
         self._param_2 = np.float64(self._kernel_params['ssk_lambda']) 
         self._param_3 = 0.0
         self._param_4 = 0.0
