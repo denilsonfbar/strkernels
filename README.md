@@ -68,7 +68,7 @@ print(predictions)
 
 ## Documentation
 
-[Refer to the documentation for comprehensive examples of applying string kernels to biological sequences.](docs/index.md)
+[Refer to the documentation for comprehensive examples of applying string kernels to biological sequences.](docs/README.md)
 
 ## Reference
 
