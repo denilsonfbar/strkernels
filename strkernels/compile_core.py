@@ -4,7 +4,7 @@ import os
 def compile_extension():
 
     # Directory where the C files are located
-    source_dir = os.path.join(os.path.dirname(__file__), '../strkernels/core')
+    source_dir = os.path.join(os.path.dirname(__file__), 'core')
     
     # Automatically find all .c files in the source directory
     c_files = [f for f in os.listdir(source_dir) if f.endswith('.c')]
@@ -23,7 +23,7 @@ def compile_extension():
     o_files = [c_file.replace('.c', '.o') for c_file in c_files]
     
     # Output .so file name
-    output_file = os.path.join(os.path.dirname(__file__), '../strkernels/core.so')
+    output_file = os.path.join(os.path.dirname(__file__), 'core.so')
     
     # Command to link object files into a shared library
     link_cmd = ['gcc', '-shared', '-o', output_file] + o_files + ['-fopenmp']
