@@ -18,7 +18,7 @@ def compile_extension():
         c_file_path = os.path.join(source_dir, c_file)
         o_file_path = c_file.replace('.c', '.o')
         compile_cmd = [
-            'gcc', '-fPIC', '-I', source_dir, '-c', c_file_path, '-o', o_file_path
+            'gcc', '-fPIC', '-I', source_dir, '-c', c_file_path, '-o', o_file_path, '-Wall'
         ]
         print(f"Compiling {c_file}...")
         subprocess.run(compile_cmd, check=True)
@@ -30,7 +30,7 @@ def compile_extension():
     output_file = os.path.join(os.path.dirname(__file__), 'core.so')
     
     # Command to link object files into a shared library
-    link_cmd = ['gcc', '-shared', '-o', output_file] + o_files + ['-fopenmp']
+    link_cmd = ['gcc', '-shared', '-o', output_file] + o_files + ['-fopenmp', '-Wall']
     
     print("Linking object files...")
     subprocess.run(link_cmd, check=True)
