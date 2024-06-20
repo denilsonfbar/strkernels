@@ -1,3 +1,7 @@
+
+# Author: Denilson Fagundes Barbosa, denilsonfbar@gmail.com
+
+
 import subprocess
 import os
 

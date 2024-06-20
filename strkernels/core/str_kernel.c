@@ -31,5 +31,7 @@ double compute_kernel(char *str_a, char *str_b,
         int32_t maxlen = (int32_t) param_1;
         double lambda = param_2;
         return compute_subsequence_sk(str_a, str_b, maxlen, lambda);
-    } 
-}    
+    }
+
+    return 0.;
+}

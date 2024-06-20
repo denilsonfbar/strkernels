@@ -15,7 +15,6 @@ double compute_locality_improved_sk(char *str_a, char *str_b,
 {
 
     int32_t str_a_len = strlen(str_a);
-    int32_t str_b_len = strlen(str_b);
 
     double* match = (double*)malloc((str_a_len) * sizeof(double));
 
