@@ -1,7 +1,6 @@
 *__pycache__/
-*.pytest_cache/
-*.vscode/
-*.ipynb_checkpoints
+.vscode/
+.pytest_cache/
 build/
 dist/
 strkernels.egg-info/

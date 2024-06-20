@@ -18,10 +18,12 @@ void compute_km(char **X_rows, char **X_cols,
                 char *normalizer,
                 double **km)
 {
+    int32_t i, j;
+
     #pragma omp parallel for private(i, j) schedule(dynamic, 32)
-    for(int32_t i=0; i < X_rows_len; ++i) 
+    for(i=0; i < X_rows_len; ++i) 
 	{
-        for(int32_t j=0; j < X_cols_len; ++j) 
+        for(j=0; j < X_cols_len; ++j) 
 		{
             if(symmetric && i > j)
             {

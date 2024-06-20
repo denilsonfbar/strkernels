@@ -4,6 +4,10 @@
 
 from setuptools import setup, Extension
 
+# Add compilation and linking flags for OpenMP
+extra_compile_args = ['-fopenmp']
+extra_link_args = ['-fopenmp']
+
 core_module = Extension(
     'strkernels.core',
     sources=[
@@ -15,7 +19,9 @@ core_module = Extension(
         'strkernels/core/str_kernel_matrix.c',
         'strkernels/core/subsequence_sk.c',
     ],
-    include_dirs=['strkernels/core']
+    include_dirs=['strkernels/core'],
+    extra_compile_args=extra_compile_args,
+    extra_link_args=extra_link_args
 )
 
 setup(
