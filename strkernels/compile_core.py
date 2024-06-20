@@ -18,7 +18,7 @@ def compile_extension():
         c_file_path = os.path.join(source_dir, c_file)
         o_file_path = c_file.replace('.c', '.o')
         compile_cmd = [
-            'gcc', '-fPIC', '-I', source_dir, '-c', c_file_path, '-o', o_file_path, '-Wall'
+            'gcc', '-fPIC', '-I', source_dir, '-c', c_file_path, '-o', o_file_path, '-fopenmp', '-Wall'
         ]
         print(f"Compiling {c_file}...")
         subprocess.run(compile_cmd, check=True)

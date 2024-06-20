@@ -33,11 +33,15 @@ if __name__ == '__main__':
 
 """
 Python kernel implementation: 1000 sequences of length 100
-.Performance test duration: 4.8814 seconds
+Performance test duration: 4.8814 seconds
 
 C kernel implementation: 1000 sequences of length 100
-.Performance test duration: 0.2006 seconds
+Performance test duration: 0.2006 seconds
 
 C kernel implementation: 5000 sequences of length 1000:
-.Performance Test Duration: 44.0703 seconds
+Performance Test Duration: 44.0703 seconds
+
+C kernel implementation: 5000 sequences of length 1000:
+#pragma omp parallel for private(i, j) schedule(dynamic, 32)
+Performance test duration: 11.8273 seconds
 """
