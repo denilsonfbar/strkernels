@@ -6,6 +6,9 @@ import subprocess
 import os
 
 def compile_extension():
+    '''
+    Compile C core extension for local tests.
+    '''
 
     # Directory where the C files are located
     source_dir = os.path.join(os.path.dirname(__file__), 'core')
@@ -27,7 +30,7 @@ def compile_extension():
     o_files = [c_file.replace('.c', '.o') for c_file in c_files]
     
     # Output .so file name
-    output_file = os.path.join(os.path.dirname(__file__), 'core.so')
+    output_file = os.path.join(os.path.dirname(__file__), 'libcore.so')
     
     # Command to link object files into a shared library
     link_cmd = ['gcc', '-shared', '-o', output_file] + o_files + ['-fopenmp', '-Wall']

@@ -60,8 +60,15 @@ class StringKernel(ABC):
         kernel_matrix = np.zeros((len(X_rows), len(X_cols)), dtype=np.float64)
 
         # including C library
-        module_path = os.path.dirname(os.path.abspath(__file__))
-        c_lib_file_path = os.path.join(module_path, 'core.so')
+        c_lib_path = os.path.dirname(os.path.abspath(__file__))
+
+        for filename in os.listdir(c_lib_path):
+            if filename.startswith('libcore'):
+                c_lib_file_path = os.path.join(c_lib_path, filename)
+                break
+        else:
+            raise ImportError(f"Cannot find the core module in {c_lib_path}")
+
         c_lib = ct.CDLL(c_lib_file_path)
 
         # ctypes compute kernel matrix function signature

@@ -1,6 +1,10 @@
 *__pycache__/
 .vscode/
 .pytest_cache/
+
+strkernels/libcore.so
+
 build/
 dist/
 strkernels.egg-info/
+wheelhouse/
