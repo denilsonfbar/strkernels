@@ -1,14 +1,4 @@
-import sys
 from setuptools import setup, Extension
-
-extra_compile_args = []
-extra_link_args = []
-
-if sys.platform == 'win32':
-    extra_compile_args = ['/openmp']
-else:
-    extra_compile_args = ['-fopenmp']
-    extra_link_args = ['-fopenmp']
 
 core_module = Extension(
     'strkernels.libcore',
@@ -22,8 +12,8 @@ core_module = Extension(
         'strkernels/core/subsequence_sk.c',
     ],
     include_dirs=['strkernels/core'],
-    extra_compile_args=extra_compile_args,
-    extra_link_args=extra_link_args
+    extra_compile_args=['-fopenmp'],
+    extra_link_args=['-fopenmp']
 )
 
 setup(
