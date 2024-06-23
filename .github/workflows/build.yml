@@ -1,4 +1,4 @@
-name: Build and Upload to TestPyPI
+name: Build and Upload to PyPI
 
 on:
   push:
@@ -26,12 +26,12 @@ jobs:
         run: |
           python -m build --sdist
 
-      - name: Upload to TestPyPI
+      - name: Upload to PyPI
         env:
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
-          twine upload --repository-url https://test.pypi.org/legacy/ dist/*.tar.gz
+          twine upload dist/*.tar.gz
 
   build-linux-wheels:
     runs-on: ubuntu-latest
@@ -58,9 +58,9 @@ jobs:
         run: |
           docker run --rm -v $(pwd):/io quay.io/pypa/manylinux2014_x86_64 /bin/bash -c "cd /io && python${{ matrix.python-version }} -m build --wheel && auditwheel repair dist/*.whl -w /io/wheelhouse/"
 
-      - name: Upload to TestPyPI
+      - name: Upload to PyPI
         env:
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
-          twine upload --repository-url https://test.pypi.org/legacy/ wheelhouse/*.whl
+          twine upload wheelhouse/*.whl
