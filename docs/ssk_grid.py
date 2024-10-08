@@ -76,8 +76,8 @@ clf = SVC(kernel=subsequence_kernel)
 
 # set parameters for grid search
 param_grid = {
-    'kernel__maxlen': [3, 4, 5],
-    'kernel__ssk_lambda': [1.2, 1.3, 1.4, 1.5],
+    'kernel__maxlen': [4, 5, 6],
+    'kernel__ssk_lambda': [0.01, 0.05, 0.1, 0.5, 1.0, 1.5, 2.0],
 }
 
 mcc_scorer = make_scorer(matthews_corrcoef)
@@ -86,7 +86,7 @@ mcc_scorer = make_scorer(matthews_corrcoef)
 grid_search = GridSearchCV(estimator=clf, 
                            param_grid=param_grid, 
                            scoring=mcc_scorer, 
-                           cv=5,
+                           cv=10,
                            n_jobs=-1, 
                            verbose=3)
 
