@@ -2,7 +2,7 @@ strkernels
 =======
 **strkernels** is a Python package compatible with Scikit-learn that implements string kernels.
 
-String kernels are functions that return a value representing how similar two input strings are. They are widely used in machine learning methods for text and biological sequence analyses.
+String kernels are functions that return a value representing how similar two input strings are. They are widely used in machine learning methods for text and biological sequence analysis.
 
 The prominent aspect of string kernels is that the prior extraction and selection of sequence features are unnecessary. The sample symbol sequences are inputs to the kernel function, automatically finding the distinguishing string features.
 

@@ -4,7 +4,7 @@ Documentation
 
 [Example of use for DNA sequences classification](example_DNA_classification.ipynb)
 
-[Example of use for protein sequences classification](example_protein_classification.ipynb)
+[Example of use for peptides sequences classification](example_peptides_classification.ipynb)
 
 
 ## Mathematical definitions
