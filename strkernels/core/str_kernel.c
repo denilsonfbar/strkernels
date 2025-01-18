@@ -8,6 +8,7 @@ Author: Denilson Fagundes Barbosa, denilsonfbar@gmail.com
 #include "fixed_degree_sk.h"
 #include "locality_improved_sk.h"
 #include "subsequence_sk.h"
+#include "weighted_degree_sk.h"
 
 double compute_kernel(char *str_a, char *str_b,
                       char *kernel_name,
@@ -32,6 +33,11 @@ double compute_kernel(char *str_a, char *str_b,
         double lambda = param_2;
         return compute_subsequence_sk(str_a, str_b, maxlen, lambda);
     }
+    else if (strcmp(kernel_name, "WeightedDegreeStringKernel") == 0) 
+    {
+        int32_t degree = (int32_t) param_1;
+        return (double)compute_weighted_degree_sk(str_a, str_b, degree);
+    } 
 
     return 0.;
 }

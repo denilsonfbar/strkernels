@@ -11,6 +11,8 @@ int64_t compute_fixed_degree_sk(char *str_a, char *str_b, int32_t degree)
 {
     int32_t str_a_len = strlen(str_a);
     int32_t str_b_len = strlen(str_b);
+
+	// Accept strings with different lengths
     int32_t shortest_str_len = (str_a_len < str_b_len) ? str_a_len : str_b_len;
 
     int64_t kernel_value = 0;
