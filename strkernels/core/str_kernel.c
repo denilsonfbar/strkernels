@@ -9,6 +9,7 @@ Author: Denilson Fagundes Barbosa, denilsonfbar@gmail.com
 #include "locality_improved_sk.h"
 #include "subsequence_sk.h"
 #include "weighted_degree_sk.h"
+#include "spectrum_sk.h"
 
 double compute_kernel(char *str_a, char *str_b,
                       char *kernel_name,
@@ -37,6 +38,12 @@ double compute_kernel(char *str_a, char *str_b,
     {
         int32_t degree = (int32_t) param_1;
         return (double)compute_weighted_degree_sk(str_a, str_b, degree);
+    } 
+    else if (strcmp(kernel_name, "SpectrumStringKernel") == 0) 
+    {
+        int32_t order = (int32_t) param_1;
+        int32_t alphabet = (int32_t) param_2;
+        return (double)compute_spectrum_sk(str_a, str_b, order, alphabet);
     } 
 
     return 0.;
