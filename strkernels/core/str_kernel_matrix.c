@@ -18,27 +18,37 @@ void compute_km(char **X_rows, char **X_cols,
                 char *normalizer,
                 double **km)
 {
-    int32_t i, j;
+    if (symmetric) {
 
-    #pragma omp parallel for private(i, j) schedule(dynamic, 32)
-    for(i=0; i < X_rows_len; ++i) 
-	{
-        for(j=0; j < X_cols_len; ++j) 
-		{
-            if(symmetric && i > j)
-            {
-                km[i][j] = km[j][i]; 
-            }
-            else
-            {
+        #pragma omp parallel for schedule(dynamic, 32)
+        for (int32_t i = 0; i < X_rows_len; ++i) {
+            for (int32_t j = 0; j <= i; ++j) {  // Only compute the lower triangular part of matrix
                 km[i][j] = compute_kernel(X_rows[i], X_cols[j],
                                           kernel_name,
                                           param_1, param_2, 
                                           param_3, param_4);
             }
-            // printf("%.0f ", km[i][j]);
         }
-        // printf("\n");
+
+        // Copy the lower triangular part to the upper triangular part
+        #pragma omp parallel for schedule(dynamic, 32)
+        for (int32_t i = 0; i < X_rows_len; ++i) {
+            for (int32_t j = 0; j < i; ++j) {
+                km[j][i] = km[i][j];
+            }
+        }
+
+    } else {  // construct full matrix
+
+        #pragma omp parallel for schedule(dynamic, 32)
+        for (int32_t i = 0; i < X_rows_len; ++i) {
+            for (int32_t j = 0; j < X_cols_len; ++j) {
+                km[i][j] = compute_kernel(X_rows[i], X_cols[j],
+                                          kernel_name,
+                                          param_1, param_2, 
+                                          param_3, param_4);
+            }
+        }
     }
 
     normalize(X_rows, X_cols, 
