@@ -6,7 +6,7 @@ String kernels are functions that return a value representing how similar two in
 
 The prominent aspect of string kernels is that the prior extraction and selection of sequence features are unnecessary. The sample symbol sequences are inputs to the kernel function, automatically finding the distinguishing string features.
 
-In this first realease, the available string kernels are:
+Currently, the available string kernels are:
 - Locality Improved (Zien *et al.* 2000)
 - Subsequence (Lodhi *et al.* 2002)
 - Spectrum (Leslie *et al.* 2002)
