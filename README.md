@@ -9,6 +9,8 @@ The prominent aspect of string kernels is that the prior extraction and selectio
 In this first realease, the available string kernels are:
 - Locality Improved (Zien *et al.* 2000)
 - Subsequence (Lodhi *et al.* 2002)
+- Spectrum (Leslie *et al.* 2002)
+- Weighted Degree (Ratsch *et al.* 2004)
 - Fixed Degree (Sonnenburg *et al.* 2010)
 
 
