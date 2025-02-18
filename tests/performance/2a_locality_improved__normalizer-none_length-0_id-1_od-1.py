@@ -6,9 +6,10 @@ import unittest
 import time
 import numpy as np
 
-# kernel class import
-from sys import path
-path.append('../..')
+# local kernel class import
+# from sys import path
+# path.append('..')
+
 from strkernels import LocalityImprovedStringKernel
 
 
@@ -39,4 +40,7 @@ if __name__ == '__main__':
 
 #pragma omp parallel for schedule(dynamic, 32)
 Performance test duration: 59.0357 seconds
+
+strkernels v0.1.0 from pip:
+Performance test duration: 45.6898 seconds
 """

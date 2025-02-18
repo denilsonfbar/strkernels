@@ -7,17 +7,16 @@ import time
 import numpy as np
 
 # local kernel class import
-# from sys import path
-# path.append('..')
+from sys import path
+path.append('../..')
 
-from strkernels import SubsequenceStringKernel
+from strkernels import SpectrumStringKernel
 
 
 class TestKernelMatrix(unittest.TestCase):
 
     def setUp(self):
-        self.kernel = SubsequenceStringKernel(maxlen=1,
-                                              ssk_lambda=1.0)
+        self.kernel = SpectrumStringKernel(order=3)
 
     def test_performance(self):
 
@@ -36,6 +35,6 @@ if __name__ == '__main__':
 """
 1000 sequences of length 100:
 
-strkernels v0.1.0 from pip:
-Performance test duration: 4.1049 seconds
+strkernels v0.1.0 local compilation:
+Performance test duration: 5.4299 seconds
 """

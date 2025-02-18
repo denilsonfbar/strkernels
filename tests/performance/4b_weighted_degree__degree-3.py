@@ -7,22 +7,21 @@ import time
 import numpy as np
 
 # local kernel class import
-# from sys import path
-# path.append('..')
+from sys import path
+path.append('../..')
 
-from strkernels import SubsequenceStringKernel
+from strkernels import WeightedDegreeStringKernel
 
 
 class TestKernelMatrix(unittest.TestCase):
 
     def setUp(self):
-        self.kernel = SubsequenceStringKernel(maxlen=1,
-                                              ssk_lambda=1.0)
+        self.kernel = WeightedDegreeStringKernel(degree=3)
 
     def test_performance(self):
 
-        strings = np.array(["ATCGA" * 20] * 1000)  # 1000 sequences of length 100
-        # strings = np.array(["ATCGA" * 200] * 5000)  # 5000 sequences of length 1000
+        # strings = np.array(["ATCGA" * 20] * 1000)  # 1000 sequences of length 100
+        strings = np.array(["ATCGA" * 200] * 5000)  # 5000 sequences of length 1000
 
         start_time = time.time()
         kernel_matrix = self.kernel(strings, strings)
@@ -34,8 +33,8 @@ if __name__ == '__main__':
     unittest.main()
 
 """
-1000 sequences of length 100:
+5000 sequences of length 1000:
 
-strkernels v0.1.0 from pip:
-Performance test duration: 4.1049 seconds
+strkernels v0.1.0 local compilation:
+Performance test duration: 69.7939 seconds
 """
