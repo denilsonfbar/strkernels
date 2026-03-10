@@ -26,10 +26,9 @@ jobs:
           # 3. *-manylinux_i686: Pula Linux 32-bit
           # 4. *-musllinux_i686: Pula Alpine 32-bit
           CIBW_SKIP: cp36-* cp37-* cp38-* pp* *-manylinux_i686 *-musllinux_i686
-          
-          # ESTRATÉGIA ANTI-COMPILAÇÃO:
-          # Fixamos o numpy e proibimos o pip de compilar do código-fonte (só aceita binários)
-          CIBW_TEST_REQUIRES: numpy==1.26.4
+
+          CIBW_TEST_REQUIRES: numpy
+          # Proibimos o pip de compilar do código-fonte (só aceita binários)
           CIBW_ENVIRONMENT: "PIP_ONLY_BINARY=:all:"
           
           CIBW_TEST_COMMAND: python -c "import strkernels; print('Sucesso:', strkernels.__all__)"
