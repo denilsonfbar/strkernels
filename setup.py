@@ -19,5 +19,8 @@ core_module = Extension(
 )
 
 setup(
-    ext_modules=[core_module]
+    ext_modules=[core_module],
+    install_requires=[
+        'numpy',
+    ],
 )

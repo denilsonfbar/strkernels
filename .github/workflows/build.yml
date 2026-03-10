@@ -21,6 +21,7 @@ jobs:
         env:
           # Garante suporte do Python 3.9 ao 3.13
           CIBW_SKIP: cp36-* cp37-* cp38-*
+          CIBW_TEST_REQUIRES: numpy
           # Comando para testar se o kernel carrega após o build
           CIBW_TEST_COMMAND: python -c "import strkernels; print(strkernels.__all__)"
 
