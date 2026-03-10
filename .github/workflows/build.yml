@@ -25,7 +25,7 @@ jobs:
           # Comando para testar se o kernel carrega após o build
           CIBW_TEST_COMMAND: python -c "import strkernels; print(strkernels.__all__)"
           CIBW_DEPENDENCY_CONSTRAINTS: ""
-          CIBW_BEFORE_ALL_MACOS: "python3 -m pip install --upgrade virtualenv"
+          CIBW_BEFORE_ALL_MACOS: "python3 -m pip install --upgrade virtualenv --break-system-packages"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
