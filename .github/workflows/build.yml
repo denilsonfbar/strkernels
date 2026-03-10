@@ -20,14 +20,18 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.22.0
         env:
-          # cp36-cp38: Versões antigas do CPython
-          # pp*: Pula todas as versões do PyPy (evita erro de compilação do NumPy)
-          CIBW_SKIP: cp36-* cp37-* cp38-* pp*
+          # FILTRO:
+          # 1. cp36-cp38: Versões obsoletas
+          # 2. pp*: Pula PyPy (evita erros de C++)
+          # 3. *-manylinux_i686: Pula Linux 32-bit
+          # 4. *-musllinux_i686: Pula Alpine 32-bit
+          CIBW_SKIP: cp36-* cp37-* cp38-* pp* *-manylinux_i686 *-musllinux_i686
           
-          # Dependência necessária para o comando de teste
-          CIBW_TEST_REQUIRES: numpy
+          # ESTRATÉGIA ANTI-COMPILAÇÃO:
+          # Fixamos o numpy e proibimos o pip de compilar do código-fonte (só aceita binários)
+          CIBW_TEST_REQUIRES: numpy==1.26.4
+          CIBW_ENVIRONMENT: PIP_ONLY_BINARY=:all:
           
-          # Validação final: garante que os símbolos C foram linkados e o pacote importa
           CIBW_TEST_COMMAND: python -c "import strkernels; print('Sucesso:', strkernels.__all__)"
 
       - name: Upload artifacts
