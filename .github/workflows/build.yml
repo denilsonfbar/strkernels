@@ -30,7 +30,7 @@ jobs:
           # ESTRATÉGIA ANTI-COMPILAÇÃO:
           # Fixamos o numpy e proibimos o pip de compilar do código-fonte (só aceita binários)
           CIBW_TEST_REQUIRES: numpy==1.26.4
-          CIBW_ENVIRONMENT: PIP_ONLY_BINARY=:all:
+          CIBW_ENVIRONMENT: "PIP_ONLY_BINARY=:all:"
           
           CIBW_TEST_COMMAND: python -c "import strkernels; print('Sucesso:', strkernels.__all__)"
 
