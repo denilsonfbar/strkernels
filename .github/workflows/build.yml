@@ -11,6 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        # Focando no Ubuntu para garantir estabilidade e evitar erros de rede do macOS
         os: [ubuntu-latest]
 
     steps:
@@ -19,12 +20,15 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.22.0
         env:
-          # Garante suporte do Python 3.9 ao 3.13
-          CIBW_SKIP: cp36-* cp37-* cp38-*
+          # cp36-cp38: Versões antigas do CPython
+          # pp*: Pula todas as versões do PyPy (evita erro de compilação do NumPy)
+          CIBW_SKIP: cp36-* cp37-* cp38-* pp*
+          
+          # Dependência necessária para o comando de teste
           CIBW_TEST_REQUIRES: numpy
-          # Comando para testar se o kernel carrega após o build
-          CIBW_TEST_COMMAND: python -c "import strkernels; print(strkernels.__all__)"
-          CIBW_TEST_SKIP: "*-macosx_*"
+          
+          # Validação final: garante que os símbolos C foram linkados e o pacote importa
+          CIBW_TEST_COMMAND: python -c "import strkernels; print('Sucesso:', strkernels.__all__)"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
