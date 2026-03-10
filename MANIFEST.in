@@ -1,3 +1,4 @@
 include README.md
 include LICENSE
 include strkernels/core/*.h
+include strkernels/core/*.c

@@ -10,6 +10,8 @@ core_module = Extension(
         'strkernels/core/str_kernel.c',
         'strkernels/core/str_kernel_matrix.c',
         'strkernels/core/subsequence_sk.c',
+        'strkernels/core/weighted_degree_sk.c', 
+        'strkernels/core/spectrum_sk.c',
     ],
     include_dirs=['strkernels/core'],
     extra_compile_args=['-fopenmp'],
