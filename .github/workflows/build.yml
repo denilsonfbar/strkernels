@@ -11,8 +11,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        # Focando no Ubuntu para garantir estabilidade e evitar erros de rede do macOS
-        os: [ubuntu-latest]
+        # ubuntu-latest: Linux (x86_64)
+        # macos-13: macOS Intel (x86_64)
+        # macos-14: macOS Apple Silicon (arm64 / M1, M2, M3)
+        os: [ubuntu-latest, macos-13, macos-14]
 
     steps:
       - uses: actions/checkout@v4
@@ -20,32 +22,60 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.22.0
         env:
-          # FILTRO:
-          # 1. cp36-cp38: Versões obsoletas
-          # 2. pp*: Pula PyPy (evita erros de C++)
-          # 3. *-manylinux_i686: Pula Linux 32-bit
-          # 4. *-musllinux_i686: Pula Alpine 32-bit
+          # Skip older Python versions and 32-bit architectures
           CIBW_SKIP: cp36-* cp37-* cp38-* pp* *-manylinux_i686 *-musllinux_i686
-
-          CIBW_TEST_REQUIRES: numpy
-          # Proibimos o pip de compilar do código-fonte (só aceita binários)
-          CIBW_ENVIRONMENT: "PIP_ONLY_BINARY=:all:"
           
-          CIBW_TEST_COMMAND: python -c "import strkernels; print('Sucesso:', strkernels.__all__)"
+          # Use numpy for testing without compiling from source
+          CIBW_TEST_REQUIRES: numpy
+          CIBW_ENVIRONMENT: "PIP_ONLY_BINARY=:all:"
+          CIBW_TEST_COMMAND: python -c "import strkernels; print('Success:', strkernels.__all__)"
+          
+          # OpenMP support for macOS
+          # Install libomp via Homebrew before compiling C extensions
+          CIBW_BEFORE_ALL_MACOS: "brew install libomp"
+          
+          # Ensure the generated architecture matches the GitHub Actions runner
+          CIBW_ARCHS_MACOS: "auto"
 
-      - name: Upload artifacts
+      - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
           name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
           path: ./wheelhouse/*.whl
 
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install build dependencies
+        run: python -m pip install build
+
+      - name: Build sdist
+        # This generates the .tar.gz file inside the dist/ folder
+        run: python -m build --sdist
+
+      - name: Upload sdist
+        uses: actions/upload-artifact@v4
+        with:
+          name: cibw-sdist
+          path: dist/*.tar.gz
+
   publish:
-    needs: [build_wheels]
+    # The publish job only runs when both wheels and sdist are successfully built
+    needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
         with:
-          pattern: cibw-wheels-*
+          # Download all artifacts starting with "cibw-" (wheels and sdist) to the dist folder
+          pattern: cibw-*
           path: dist
           merge-multiple: true
 
