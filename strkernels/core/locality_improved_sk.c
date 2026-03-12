@@ -15,18 +15,22 @@ double compute_locality_improved_sk(char *str_a, char *str_b,
 {
 
     int32_t str_a_len = strlen(str_a);
+    int32_t str_b_len = strlen(str_b);
+    	
+	// Accept strings with different lengths
+	int32_t shortest_str_len = (str_a_len < str_b_len) ? str_a_len : str_b_len;
 
-    double* match = (double*)malloc((str_a_len) * sizeof(double));
+    double* match = (double*)malloc((shortest_str_len) * sizeof(double));
 
     // initialize match table
-    for (int32_t i = 0; i < str_a_len; i++)
+    for (int32_t i = 0; i < shortest_str_len; i++)
         match[i] = (str_a[i] == str_b[i]) ? 1.0 : 0.0;
 
     double outer_sum = 0.0;
 
-    for (int32_t t = 0; t < str_a_len - length; t++) {
+    for (int32_t t = 0; t < shortest_str_len - length; t++) {
         double sum = 0.0;
-        for (int32_t i = 0; i < length && t + i + length + 1 < str_a_len; i++)
+        for (int32_t i = 0; i < length && t + i + length + 1 < shortest_str_len; i++)
             sum += (i + 1) * match[t + i] + (length - i) * match[t + i + length + 1];
 
         // add middle element + normalize with sum_i=0^2l+1 i = (2l+1)(l+1)

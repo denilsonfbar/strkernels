@@ -19,8 +19,8 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.22.0
         env:
-          # Skip older Python versions and 32-bit architectures
-          CIBW_SKIP: cp36-* cp37-* cp38-* pp* *-manylinux_i686 *-musllinux_i686
+          # Skip older Pythons, PyPy, 32-bit manylinux, and ALL musllinux builds
+          CIBW_SKIP: cp36-* cp37-* cp38-* pp* *-manylinux_i686 *-musllinux_*
           
           # Use numpy for testing without compiling from source
           CIBW_TEST_REQUIRES: numpy
