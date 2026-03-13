@@ -74,7 +74,7 @@ print(predictions)
 
 If you use or discuss this package, please cite:
 
-Barbosa, D.F., Rocha, M., Kashiwabara, A.Y. (2024). strkernels: a optimized string kernels Python package. *Under development*. 
+Barbosa, D.F., Rocha, M., Kashiwabara, A.Y. (2024). strkernels: a optimized string kernels Python package. 
 
 ## License
 

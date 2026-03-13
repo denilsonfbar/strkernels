@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Barbosa"
+  given-names: "Denilson Fagundes"
+  orcid: "https://orcid.org/0000-0002-6104-1987"
+title: "strkernels: a optimized string kernels Python package"
+version: 0.2.15
+date-released: 2026-02-18
+url: "https://github.com/denilsonfbar/strkernels"
+keywords:
+  - string kernels
+  - bioinformatics
+  - machine learning
+  - Python
+license: GPL-3.0
